@@ -9,7 +9,7 @@ public class Plane extends BaseActor {
 
         loadAnimationFromFiles(filenames, 0.1f, true);
 
-        setMaxSpeed(800);
+        setMaxSpeed(2000);
         setBoundaryPolygon(8);
     }
 
@@ -18,7 +18,7 @@ public class Plane extends BaseActor {
         super.act(dt);
 
         // simulate force of gravity
-        setAcceleration(800);
+        setAcceleration(1500);
         accelerateAtAngle(270);
         applyPhysics(dt);
 
@@ -36,7 +36,7 @@ public class Plane extends BaseActor {
     }
 
     public void boost() {
-        setSpeed(300);
+        setSpeed(1000);
         setMotionAngle(90);
     }
 }

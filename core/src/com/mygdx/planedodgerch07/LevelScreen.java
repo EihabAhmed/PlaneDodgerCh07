@@ -1,6 +1,9 @@
 package com.mygdx.planedodgerch07;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -18,6 +21,10 @@ public class LevelScreen extends BaseScreen {
     float enemySpeed;
     boolean gameOver;
     BaseActor gameOverMessage;
+
+    Music backgroundMusic;
+    Sound sparkleSound;
+    Sound explosionSound;
 
     @Override
     public void initialize() {
@@ -47,6 +54,14 @@ public class LevelScreen extends BaseScreen {
 
         uiTable.row();
         uiTable.add(gameOverMessage).expandY();
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Prelude-and-Action.mp3"));
+        sparkleSound = Gdx.audio.newSound(Gdx.files.internal("sparkle.mp3"));
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
+
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(1.00f);
+        backgroundMusic.play();
     }
 
     @Override
@@ -66,6 +81,10 @@ public class LevelScreen extends BaseScreen {
                 star.remove();
                 score++;
                 scoreLabel.setText(Integer.toString(score));
+
+                Sparkle sp = new Sparkle(0, 0, mainStage);
+                sp.centerAtActor(star);
+                sparkleSound.play();
             }
         }
 
@@ -90,6 +109,12 @@ public class LevelScreen extends BaseScreen {
                 plane.remove();
                 gameOver = true;
                 gameOverMessage.setVisible(true);
+
+                Explosion ex = new Explosion(0, 0, mainStage);
+                ex.centerAtActor(plane);
+                ex.setScale(3);
+                explosionSound.play();
+                backgroundMusic.stop();
             }
 
             if (enemy.getX() + enemy.getWidth() < 0) {
